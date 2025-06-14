@@ -42,6 +42,10 @@ public class FarmerConfig {
         return plugin.getConfig().getInt("farmer.growRadius", 5);
     }
 
+    public String getFarmerHeadSkin() {
+        return plugin.getConfig().getString("farmerHead.skin");
+    }
+
 
     public List<String> getFarmerHeadLore() {
         if (!plugin.getConfig().contains("farmerHead.lore")) {

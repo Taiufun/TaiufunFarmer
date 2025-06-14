@@ -43,8 +43,10 @@ public class FarmerCommand implements CommandExecutor {
             return true;
         }
 
-        String skin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWRjYzRiMmE3ZTMyZTkyMjAxYzU3YTNlMzUyMzY3YTU0MzYxOGRhZDdiMzUyNzhiOWQ2YWFmNmRiMTU4MWJjOSJ9fX0=";
+
+
         FarmerConfig farmerConfig = new FarmerConfig(plugin);
+        String skin = farmerConfig.getFarmerHeadSkin();
         targetPlayer.getInventory().addItem(HeadUtils.create(plugin, skin, farmerConfig.getFarmerHeadDisplayName(), farmerConfig.getFarmerHeadLore()));
 
         return true;

@@ -4,6 +4,9 @@ farmerHead:
   displayName: "&d&lШар Огородника" # название предмета
   lore: # описание
     - ""
+  # Скин головы в формате base64, сгенерированный с помощью сайта, вы можете это сделать свою тут:
+  # https://minecraft-heads.com/custom-heads
+  skin: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWRjYzRiMmE3ZTMyZTkyMjAxYzU3YTNlMzUyMzY3YTU0MzYxOGRhZDdiMzUyNzhiOWQ2YWFmNmRiMTU4MWJjOSJ9fX0="
 messages:
   cooldown:
     wait: "&cПожалуйста, подождите {time} секунд перед повторным использованием." # {time} - время до использования
