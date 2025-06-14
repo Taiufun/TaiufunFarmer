@@ -1,5 +1,5 @@
 name: TaiufunFarmer
-version: 5.0
+version: 5.1
 main: ru.taiufun.taiufunfarmer.TaiufunFarmer
 api-version: '1.16'
 commands:
