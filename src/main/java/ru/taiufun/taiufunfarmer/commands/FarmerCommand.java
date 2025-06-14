@@ -1,4 +1,54 @@
 package ru.taiufun.taiufunfarmer.commands;
 
-public class FarmerCommand {
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import ru.taiufun.taiufunfarmer.TaiufunFarmer;
+import ru.taiufun.taiufunfarmer.config.FarmerConfig;
+import ru.taiufun.taiufunfarmer.utils.HeadUtils;
+
+public class FarmerCommand implements CommandExecutor {
+
+    private final TaiufunFarmer plugin;
+
+
+    public FarmerCommand(TaiufunFarmer plugin, FarmerConfig farmerConfig) {
+        this.plugin = plugin;
+
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player) && (args.length == 0)) {
+
+            sender.sendMessage("Команда только для игроков или с указанием ника");
+            return true;
+        }
+
+        Player targetPlayer;
+
+        if (args.length > 0) {
+            targetPlayer = plugin.getServer().getPlayerExact(args[0]);
+            if (targetPlayer == null) {
+                sender.sendMessage(ChatColor.RED + "Игрок с ником '" + args[0] + "' не найден.");
+                return true;
+            }
+        } else {
+            targetPlayer = (Player) sender;
+        }
+
+        if (!sender.hasPermission("taiufunfarmer.givehead")) {
+            return true;
+        }
+
+        String skin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWRjYzRiMmE3ZTMyZTkyMjAxYzU3YTNlMzUyMzY3YTU0MzYxOGRhZDdiMzUyNzhiOWQ2YWFmNmRiMTU4MWJjOSJ9fX0=";
+        FarmerConfig farmerConfig = new FarmerConfig(plugin);
+        targetPlayer.getInventory().addItem(HeadUtils.create(plugin, skin, farmerConfig.getFarmerHeadDisplayName(), farmerConfig.getFarmerHeadLore()));
+
+        return true;
+    }
+
+
 }
