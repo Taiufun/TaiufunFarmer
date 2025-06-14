@@ -10,19 +10,8 @@ import ru.taiufun.taiufunfarmer.utils.HeadUtils;
 
 public class FarmerPlaceListener implements Listener {
 
-    private final TaiufunFarmer plugin;
-
-
-    public FarmerPlaceListener(TaiufunFarmer plugin, FarmerConfig farmerConfig) {
-        this.plugin = plugin;
-    }
-
-    @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
-        ItemStack item = event.getItemInHand();
-
-        if (HeadUtils.isFarmerHead(plugin, item)) {
-            event.setCancelled(true);
-        }
+    @EventHandler(ignoreCancelled = true)
+    private void onBlockPlace(BlockPlaceEvent event) {
+        if (HeadUtils.isFarmerHead(event.getItemInHand())) event.setCancelled(true);
     }
 }

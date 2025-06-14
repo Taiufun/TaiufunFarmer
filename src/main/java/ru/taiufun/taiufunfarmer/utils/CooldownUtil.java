@@ -8,35 +8,21 @@ import java.util.UUID;
 
 public class CooldownUtil {
 
-    private static final Map<UUID, Map<String, Long>> cooldowns = new HashMap<>();
+    private static final Map<UUID, Long> cooldowns = new HashMap<>();
 
-
-    public static boolean hasCooldown(Player player, String key) {
-        UUID uuid = player.getUniqueId();
-        if (!cooldowns.containsKey(uuid)) return false;
-
-        Map<String, Long> playerCooldowns = cooldowns.get(uuid);
-        if (!playerCooldowns.containsKey(key)) return false;
-
-        long expireTime = playerCooldowns.get(key);
-        return System.currentTimeMillis() < expireTime;
+    public static boolean hasCooldown(Player player) {
+        long now = System.currentTimeMillis();
+        long expireAt = cooldowns.getOrDefault(player.getUniqueId(), 0L);
+        return expireAt > now;
     }
 
-
-    public static void startCooldown(Player player, String key, long cooldownMillis) {
-        cooldowns.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>())
-                .put(key, System.currentTimeMillis() + cooldownMillis);
+    public static void startCooldown(Player player, long cooldownMillis) {
+        cooldowns.put(player.getUniqueId(), System.currentTimeMillis() + cooldownMillis);
     }
 
-    public static long getCooldownLeft(Player player, String key) {
-        UUID uuid = player.getUniqueId();
-        if (!cooldowns.containsKey(uuid)) return 0;
-
-        Map<String, Long> playerCooldowns = cooldowns.get(uuid);
-        if (!playerCooldowns.containsKey(key)) return 0;
-
-        long expireTime = playerCooldowns.get(key);
-        long left = expireTime - System.currentTimeMillis();
-        return left > 0 ? left : 0;
+    public static long getCooldownLeft(Player player) {
+        long now = System.currentTimeMillis();
+        long expireAt = cooldowns.getOrDefault(player.getUniqueId(), 0L);
+        return Math.max(0, expireAt - now);
     }
 }

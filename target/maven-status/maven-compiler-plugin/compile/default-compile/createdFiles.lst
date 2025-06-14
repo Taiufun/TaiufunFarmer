@@ -1,0 +1,10 @@
+ru\taiufun\taiufunfarmer\config\FarmerConfig$FARMER.class
+ru\taiufun\taiufunfarmer\utils\PlantUtils.class
+ru\taiufun\taiufunfarmer\listeners\FarmerPlaceListener.class
+ru\taiufun\taiufunfarmer\utils\Colorizer.class
+ru\taiufun\taiufunfarmer\utils\CooldownUtil.class
+ru\taiufun\taiufunfarmer\utils\HeadUtils.class
+ru\taiufun\taiufunfarmer\listeners\FarmerUseListener.class
+ru\taiufun\taiufunfarmer\TaiufunFarmer.class
+ru\taiufun\taiufunfarmer\commands\FarmerCommand.class
+ru\taiufun\taiufunfarmer\config\FarmerConfig.class

@@ -1,68 +1,60 @@
 package ru.taiufun.taiufunfarmer.config;
 
-
+import lombok.Getter;
+import lombok.experimental.UtilityClass;
+import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import ru.taiufun.taiufunfarmer.TaiufunFarmer;
+import ru.taiufun.taiufunfarmer.utils.Colorizer;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class FarmerConfig {
 
-    private final TaiufunFarmer plugin;
+    private static FileConfiguration config;
 
-    public FarmerConfig(TaiufunFarmer plugin) {
-        this.plugin = plugin;
-        loadConfig();
+    public static void load(FileConfiguration file) {
+        config = file;
+
+        cooldownWaitMessage = Colorizer.use(config.getString("messages.cooldown"));
+
+        parseFarmer();
     }
 
-    public void loadConfig() {
-        plugin.saveDefaultConfig();
-        plugin.reloadConfig();
+    public static String cooldownWaitMessage;
+
+    private static void parseFarmer() {
+        final ConfigurationSection section = config.getConfigurationSection("farmer");
+
+        FARMER.display = Colorizer.use(section.getString("display"));
+        FARMER.texture = section.getString("texture");
+        FARMER.growRadius = section.getInt("growRadius");
+        FARMER.growCooldownSeconds = section.getInt("growCooldownSeconds");
+
+        final List<?> rawLore = section.getList("lore");
+        if (rawLore == null || rawLore.isEmpty()) return;
+
+        FARMER.lore = rawLore.stream()
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(Colorizer::use)
+                .toList();
     }
 
-    private String colorize(String message) {
-        return message == null ? "" : message.replace('&', '§');
-    }
-    public String getCooldownWaitMessage() {
-        String msg = plugin.getConfig().getString("messages.cooldown.wait");
-        return colorize(msg != null ? msg : "&cПожалуйста, подождите {time} секунд перед повторным использованием.");
-    }
-
-    public int getGrowCooldownSeconds() {
-        return plugin.getConfig().getInt("farmer.growCooldownSeconds", 30);
+    public static class FARMER {
+        public static int growCooldownSeconds;
+        public static int growRadius;
+        public static String display;
+        public static String texture;
+        public static List<String> lore;
     }
 
-
-    public String getFarmerHeadDisplayName() {
-        String name = plugin.getConfig().getString("farmerHead.displayName");
-        return colorize(name);
-    }
-    public int getGrowRadius() {
-        return plugin.getConfig().getInt("farmer.growRadius", 5);
-    }
-
-    public String getFarmerHeadSkin() {
-        return plugin.getConfig().getString("farmerHead.skin");
-    }
-
-
-    public List<String> getFarmerHeadLore() {
-        if (!plugin.getConfig().contains("farmerHead.lore")) {
-            return null;
-        }
-
-        List<String> lore = plugin.getConfig().getStringList("farmerHead.lore");
-
-        boolean hasMeaningfulLore = lore.stream()
-                .anyMatch(line -> line != null && !line.trim().isEmpty());
-
-        if (!hasMeaningfulLore) {
-            return null;
-        }
-
-        return lore.stream()
-                .map(this::colorize)
-                .collect(Collectors.toList());
-    }
 }
