@@ -3,13 +3,4 @@ version: 5.1
 main: ru.taiufun.taiufunfarmer.TaiufunFarmer
 api-version: '1.16'
 commands:
-  taiufunfarmer:
-    usage: /taiufunfarmer
-
-permissions:
-  taiufunfarmer.givehead:
-    description: Позволяет выдавать голову с помощью команды
-    default: op
-  taiufunfarmer.bypasscooldown:
-    description: Позволяет обходить кулдаун на выращивание
-    default: op
+  taiufunfarmer: {}

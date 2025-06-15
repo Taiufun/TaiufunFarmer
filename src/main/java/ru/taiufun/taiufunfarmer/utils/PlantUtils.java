@@ -1,27 +1,36 @@
-// com/taiufunfarmer/utils/PlantUtils.java
 package ru.taiufun.taiufunfarmer.utils;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 
+import java.util.Set;
+
 public class PlantUtils {
 
-    public static void growPlantsAround(Block center, int radius) {
-        int cx = center.getX();
-        int cy = center.getY();
-        int cz = center.getZ();
+    private static final Set<Material> GROWABLE_PLANTS = Set.of(
+            Material.WHEAT,
+            Material.CARROTS,
+            Material.POTATOES,
+            Material.BEETROOTS,
+            Material.SWEET_BERRY_BUSH,
+            Material.COCOA
+    );
 
-        for (int x = cx - radius; x <= cx + radius; x++) {
-            for (int y = cy - radius; y <= cy + radius; y++) {
-                for (int z = cz - radius; z <= cz + radius; z++) {
-                    Block block = center.getWorld().getBlockAt(x, y, z);
-                    if (block == null) continue;
+    public static void growPlantsAround(Block center, int radius) {
+        final int xx = center.getX();
+        final int yy = center.getY();
+        final int zz = center.getZ();
+
+        for (int x = xx - radius; x <= xx + radius; x++) {
+            for (int z = zz - radius; z <= zz + radius; z++) {
+                for (int y = yy - radius; y <= yy + radius; y++) {
+                    final Block block = center.getWorld().getBlockAt(x, y, z);
 
                     if (isGrowablePlant(block)) {
-                        Ageable ageable = (Ageable) block.getBlockData();
-                        ageable.setAge(ageable.getMaximumAge());
-                        block.setBlockData(ageable, true);
+                        final Ageable data = (Ageable) block.getBlockData();
+                        data.setAge(data.getMaximumAge());
+                        block.setBlockData(data, true);
                     }
                 }
             }
@@ -29,17 +38,6 @@ public class PlantUtils {
     }
 
     private static boolean isGrowablePlant(Block block) {
-        Material mat = block.getType();
-        switch (mat) {
-            case WHEAT:
-            case CARROTS:
-            case POTATOES:
-            case BEETROOTS:
-            case SWEET_BERRY_BUSH:
-            case COCOA:
-                return block.getBlockData() instanceof Ageable;
-            default:
-                return false;
-        }
+        return GROWABLE_PLANTS.contains(block.getType()) && block.getBlockData() instanceof Ageable;
     }
 }

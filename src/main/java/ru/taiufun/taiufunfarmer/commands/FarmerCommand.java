@@ -1,5 +1,6 @@
 package ru.taiufun.taiufunfarmer.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,44 +12,28 @@ import ru.taiufun.taiufunfarmer.utils.HeadUtils;
 
 public class FarmerCommand implements CommandExecutor {
 
-    private final TaiufunFarmer plugin;
-
-
-    public FarmerCommand(TaiufunFarmer plugin, FarmerConfig farmerConfig) {
-        this.plugin = plugin;
-
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player) && (args.length == 0)) {
+        if (!sender.hasPermission("taiufunfarmer.givehead")) return true;
 
-            sender.sendMessage("Команда только для игроков или с указанием ника");
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("Команда только для игроков!");
             return true;
         }
 
-        Player targetPlayer;
-
-        if (args.length > 0) {
-            targetPlayer = plugin.getServer().getPlayerExact(args[0]);
-            if (targetPlayer == null) {
-                sender.sendMessage(ChatColor.RED + "Игрок с ником '" + args[0] + "' не найден.");
-                return true;
-            }
-        } else {
-            targetPlayer = (Player) sender;
-        }
-
-        if (!sender.hasPermission("taiufunfarmer.givehead")) {
+        if (args.length == 0) {
+            sender.sendMessage("/taiufunfarmer <ник>");
             return true;
         }
 
+        final Player target = Bukkit.getPlayer(args[0]);
+        if (target == null) {
+            sender.sendMessage("Игрок не найден!");
+            return true;
+        }
 
-
-        FarmerConfig farmerConfig = new FarmerConfig(plugin);
-        String skin = farmerConfig.getFarmerHeadSkin();
-        targetPlayer.getInventory().addItem(HeadUtils.create(plugin, skin, farmerConfig.getFarmerHeadDisplayName(), farmerConfig.getFarmerHeadLore()));
-
+        target.getInventory().addItem(HeadUtils.STACK);
+        sender.sendMessage("ok");
         return true;
     }
 
